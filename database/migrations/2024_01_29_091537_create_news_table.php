@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('title', 255);
             $table->text('content');
             $table->string('banner_image', 2083);
-            $table->foreignId('category_id')->nullable->constrained();
+            $table->foreignId('category_id')->nullable()->constrained();
             $table->timestamps();
             $table->softDeletes();
         });
