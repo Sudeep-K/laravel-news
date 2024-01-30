@@ -28,8 +28,4 @@ class Tag extends Model
         'name',
         'slug'
     ];
-
-    // public function tags():BelongsToMany{
-    //     return $this->belongsToMany(Tag::class);
-    // }
 }
