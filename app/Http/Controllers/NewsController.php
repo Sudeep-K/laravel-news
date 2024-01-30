@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreNewsRequest;
 use App\Models\Category;
 use App\Models\News;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
@@ -40,6 +41,12 @@ class NewsController extends Controller
     public function store(StoreNewsRequest $request)
     {
 
+        $tags = $request->tags;
+        $tags = explode(",", $tags);
+        // dd($tags);
+
+
+
         if ($request->has('image')) {
             $file = $request->file('image');
             $extension = $file->getClientOriginalExtension();
@@ -47,6 +54,8 @@ class NewsController extends Controller
             $path = "uploads/news/";
             $file->move($path, $filename);
         }
+
+
 
         $data = [
             'title' => $request->title,
@@ -57,6 +66,17 @@ class NewsController extends Controller
         ];
 
         $newData = News::create($data);
+
+        foreach ($tags as $tag) {
+            if (Tag::where('name', $tag)->exists()) {
+
+                $tagData = Tag::where('name', $tag)->first();
+                $newData->tags()->attach($tagData->id);
+            } else {
+                $tagData = Tag::create(['name' => $tag, 'slug' => Str::slug($tag)]);
+                $newData->tags()->attach($tagData->id);
+            }
+        }
         return redirect(route('news.index'))->with('message', 'Succesfully created');
     }
 

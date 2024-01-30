@@ -27,6 +27,7 @@ class StoreNewsRequest extends FormRequest
                 'content' => 'required',
                 'category_id' => 'required|integer',
                 'image' => 'required|mimes:jpeg,png,jpg,gif',
+                'tags' => 'nullable|string'
             ];
         }
 
