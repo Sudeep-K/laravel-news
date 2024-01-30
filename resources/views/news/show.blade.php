@@ -9,8 +9,15 @@
 </head>
 
 <body>
+    <a href="{{ route('news.index') }}">Go back to homepage</a>
     <h1>Single Page</h1>
-    {{ dd($news) }}
+
+    <div>
+        <img src="{{ asset($news->banner_image) }}" alt=" " style="height:200px;" />
+    </div>
+    <p>
+        {{ $news->content }}
+    </p>
 </body>
 
 </html>
