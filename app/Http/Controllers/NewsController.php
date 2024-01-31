@@ -13,23 +13,20 @@ use Illuminate\Support\Str;
 class NewsController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of all the news.
      */
     public function index()
     {
 
         $news = News::all();
-
         return view('news.index', ['news' => $news]);
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new news.
      */
     public function create()
     {
-        //
-
         $categories = Category::all();
 
         return view('news.create', ['categories' => $categories]);
@@ -43,6 +40,10 @@ class NewsController extends Controller
 
         $tags = $request->tags;
         $tags = explode(",", $tags);
+        $tags = array_map(fn ($tag) => trim($tag), $tags);
+        // dd($tags);
+
+
 
         if ($request->has('image')) {
             $file = $request->file('image');
@@ -64,7 +65,6 @@ class NewsController extends Controller
 
         foreach ($tags as $tag) {
             if (Tag::where('name', $tag)->exists()) {
-
                 $tagData = Tag::where('name', $tag)->first();
                 $newData->tags()->attach($tagData->id);
             } else {
@@ -72,50 +72,59 @@ class NewsController extends Controller
                 $newData->tags()->attach($tagData->id);
             }
         }
-        
+
         return redirect(route('news.index'))->with('message', 'Succesfully created');
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified news.
      */
-    public function show(string $id)
+    public function show(News $news)
     {
-        //
-
-        $news = News::find($id);
-
         return view('news.show', ['news' => $news]);
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing the specified news.
      */
-    public function edit(string $id)
+    public function edit(News $news)
     {
-        $tags = News::find($id)->tags;
-        $tagData = [];
-
-        foreach ($tags as $tag) {
-            array_push($tagData, $tag->name);
-        }
-
-
-        $news = News::findOrFail($id);
-
         $categories = Category::all();
+        $retrieved_tags = implode(",", $news->tags->map(fn ($tag) => $tag->name)->toArray());
 
-        return view('news.edit', ['news' => $news, 'categories' => $categories, 'tags' => $tagData]);
+        // dd($retrieved_tags);
+
+        return view('news.edit', ['news' => $news, 'categories' => $categories, 'tags' => $retrieved_tags]);
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified news with tags and category in storage.
      */
-    public function update(StoreNewsRequest $request, string $id)
+    public function update(StoreNewsRequest $request, News $news)
     {
+        // stores all the new and existing tags except the tags that were deleted
+        $tag_ids = [];
 
+        // parse the tag here to array format from string
+        $tags = $request->tags;
+        $tags = explode(",", $tags);
+        $tags = array_map(fn ($tag) => trim($tag), $tags);
 
-        $news = News::find($id);
+        // check if the tag is available, else create a new tag
+        foreach ($tags as $tag) {
+            if (Tag::where('name', $tag)->exists()) {
+                $tagData = Tag::where('name', $tag)->first();
+                array_push($tag_ids, $tagData->id);
+            } else {
+                $tagData = Tag::create(['name' => $tag, 'slug' => Str::slug($tag)]);
+                $news->tags()->attach($tagData->id);
+                array_push($tag_ids, $tagData->id);
+            }
+        }
+
+        // now sync the ids for the news in the pivot table and remove all other attachments
+        $news->tags()->sync($tag_ids);
+
 
         if ($request->has('image')) {
             $file = $request->file('image');
