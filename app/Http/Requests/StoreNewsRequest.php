@@ -27,7 +27,7 @@ class StoreNewsRequest extends FormRequest
                 'content' => 'required',
                 'category_id' => 'required|integer',
                 'image' => 'required|mimes:jpeg,png,jpg,gif',
-                'tags' => 'nullable|string'
+                'tags' => 'required|string'
             ];
         }
 
@@ -36,6 +36,7 @@ class StoreNewsRequest extends FormRequest
                 'title' => 'required',
                 'content' => 'required',
                 'category_id' => 'required|integer',
+                'tags' => 'required|string',
                 'image' => 'nullable|mimes:jpeg,png,jpg,gif',
             ];
         }

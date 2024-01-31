@@ -18,11 +18,10 @@
 
         <div class="form-group">
             <label for="title" name="title" class="form-label">Title</label>
-            <input type="text" name="title" placeholder="Enter title" class="form-control"
-                value="{{ $news->title }}" />
+            <input type="text" name="title" placeholder="Enter title" class="form-control" value="{{ $news->title }}" />
             <span>
                 @error('title')
-                    {{ $message }}
+                {{ $message }}
                 @enderror
             </span>
         </div>
@@ -31,7 +30,7 @@
             <textarea type="text" name="content" placeholder="Enter content">{{ $news->content }}</textarea>
             <span>
                 @error('content')
-                    {{ $message }}
+                {{ $message }}
                 @enderror
             </span>
         </div>
@@ -40,14 +39,14 @@
             <select name="category_id">
 
                 @foreach ($categories as $category)
-                    <option value={{ $category->id }} @if ($category->id == $news->category_id) {{ 'selected' }} @endif>
-                        {{ $category->name }}
-                    </option>
+                <option value={{ $category->id }} @if ($category->id == $news->category_id) {{ 'selected' }} @endif>
+                    {{ $category->name }}
+                </option>
                 @endforeach
             </select>
             <span>
                 @error('category_id')
-                    {{ $message }}
+                {{ $message }}
                 @enderror
             </span>
         </div>
@@ -56,11 +55,15 @@
             <input type="file" name="image" placeholder="Enter title" />
             <span>
                 @error('image')
-                    {{ $message }}
+                {{ $message }}
                 @enderror
             </span>
         </div>
 
+        <div>
+            <label for="tags" name="tags">Tags</label>
+            <input type="text" name="tags" value="{{ $tags }}" />
+        </div>
 
         <button type="submit">Submit</button>
     </form>

@@ -65,7 +65,7 @@
             <input type="text" name="tags" />
         </div>
 
-        <br>
+        <br />
 
 
 
