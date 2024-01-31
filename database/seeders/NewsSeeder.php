@@ -17,6 +17,14 @@ class NewsSeeder extends Seeder
     {
         //
 
-        // News::factory()->count(10)->create();
+        News::factory(5)
+            ->for(Category::factory())
+            ->has(Tag::factory()->count(2))
+            ->create();
+
+        News::factory(2)
+        ->for(Category::factory())
+        ->has(Tag::factory()->count(3))
+        ->create();
     }
 }
