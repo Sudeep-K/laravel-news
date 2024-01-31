@@ -37,6 +37,7 @@ class CategoryController extends Controller
      */
     public function store(StoreCategoryRequest $request)
     {
+
         Category::create([
             "name" => $request->name,
             "slug" => Str::slug($request->name, "-")
@@ -76,7 +77,8 @@ class CategoryController extends Controller
         $category->slug = Str::slug($request->name, "-");
         $category->save();
 
-        return redirect(route("categories.show", ["category" => $category]));
+        $categories = Category::all();
+        return view('categories.index', ['categories' => $categories]);
     }
 
     /**
@@ -85,6 +87,8 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
+
+
         Category::destroy($category->id);
         return redirect(route("categories.index"));
     }
