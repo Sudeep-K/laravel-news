@@ -23,7 +23,7 @@ class StoreNewsRequest extends FormRequest
     {
         if ($this->isMethod('post')) {
             return [
-                'title' => 'required',
+                'title' => 'required|unique:news,title',
                 'content' => 'required',
                 'category_id' => 'required|integer',
                 'image' => 'required|mimes:jpeg,png,jpg,gif',

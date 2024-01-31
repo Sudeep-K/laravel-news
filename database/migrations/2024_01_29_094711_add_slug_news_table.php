@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('news', function (Blueprint $table) {
             $table->after('banner_image', function (Blueprint $table) {
-                $table->string('slug', 255);
+                $table->string('slug', 255)->unique();
             });
         });
     }

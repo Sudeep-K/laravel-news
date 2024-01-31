@@ -36,6 +36,15 @@
             </span>
         </div>
         <div>
+            <label for="image" name="image">Banner Image</label>
+            <input type="file" name="image" placeholder="Enter title" />
+            <span>
+                @error('image')
+                    {{ $message }}
+                @enderror
+            </span>
+        </div>
+        <div>
             <label for="category_id" name="category_id">Categories</label>
             <select name="category_id">
 
@@ -51,15 +60,13 @@
                 @enderror
             </span>
         </div>
+
         <div>
-            <label for="image" name="image">Banner Image</label>
-            <input type="file" name="image" placeholder="Enter title" />
-            <span>
-                @error('image')
-                    {{ $message }}
-                @enderror
-            </span>
+            <label for="tags" name="tags">Tags</label>
+            <input type="text" name="tags" value={{ implode(',', $tags) }} />
         </div>
+
+
 
 
         <button type="submit">Submit</button>

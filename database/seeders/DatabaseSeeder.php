@@ -17,9 +17,9 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
 
-        $tags = Tag::factory(10)->create();
+        $tags = Tag::factory(2)->create();
 
-        Category::factory(20)->create()
+        Category::factory(5)->create()
             ->each(function ($category) use ($tags) {
                 News::create([
                     'title' => fake()->text(20),
@@ -28,7 +28,7 @@ class DatabaseSeeder extends Seeder
                     'slug' => fake()->slug(),
                     'category_id' => $category->id
                 ])->each(function ($news) use ($tags) {
-                    $news->tags()->attach($tags->random(2));
+                    $news->tags()->attach($tags->random(1));
                 });
             });
 

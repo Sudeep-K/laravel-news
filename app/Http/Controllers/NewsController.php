@@ -43,9 +43,6 @@ class NewsController extends Controller
 
         $tags = $request->tags;
         $tags = explode(",", $tags);
-        // dd($tags);
-
-
 
         if ($request->has('image')) {
             $file = $request->file('image');
@@ -54,8 +51,6 @@ class NewsController extends Controller
             $path = "uploads/news/";
             $file->move($path, $filename);
         }
-
-
 
         $data = [
             'title' => $request->title,
@@ -77,6 +72,7 @@ class NewsController extends Controller
                 $newData->tags()->attach($tagData->id);
             }
         }
+        
         return redirect(route('news.index'))->with('message', 'Succesfully created');
     }
 
@@ -97,11 +93,19 @@ class NewsController extends Controller
      */
     public function edit(string $id)
     {
+        $tags = News::find($id)->tags;
+        $tagData = [];
+
+        foreach ($tags as $tag) {
+            array_push($tagData, $tag->name);
+        }
+
 
         $news = News::findOrFail($id);
+
         $categories = Category::all();
 
-        return view('news.edit', ['news' => $news, 'categories' => $categories]);
+        return view('news.edit', ['news' => $news, 'categories' => $categories, 'tags' => $tagData]);
     }
 
     /**
@@ -109,6 +113,8 @@ class NewsController extends Controller
      */
     public function update(StoreNewsRequest $request, string $id)
     {
+
+
         $news = News::find($id);
 
         if ($request->has('image')) {
@@ -129,6 +135,28 @@ class NewsController extends Controller
         $news->banner_image = isset($filename) ? $path . $filename : $news->banner_image;
 
         $news->save();
+
+        // $tags = $request->tags;
+        // $tags = explode(",", $tags);
+
+        // $tagsFromDB = News::find($id)->tags;
+        // foreach ($tagsFromDB as $tagDB) {
+        //     $news->tags()->detach($tagDB->id);
+        // }
+
+
+
+
+        // foreach ($tags as $tag) {
+        //     if (Tag::where('name', $tag)->exists()) {
+
+        //         $tagData = Tag::where('name', $tag)->first();
+        //         $news->tags()->attach($tagData->id);
+        //     } else {
+        //         $tagData = Tag::create(['name' => $tag, 'slug' => Str::slug($tag)]);
+        //         $news->tags()->attach($tagData->id);
+        //     }
+        // }
 
 
         return redirect(route('news.index'))->with('message', 'Succesfully updated');
