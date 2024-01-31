@@ -17,20 +17,20 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
 
-        $tags = Tag::factory(2)->create();
+        // $tags = Tag::factory(2)->create();
 
-        Category::factory(5)->create()
-            ->each(function ($category) use ($tags) {
-                News::create([
-                    'title' => fake()->text(20),
-                    'content' => fake()->paragraph(),
-                    'banner_image' => fake()->text(10),
-                    'slug' => fake()->slug(),
-                    'category_id' => $category->id
-                ])->each(function ($news) use ($tags) {
-                    $news->tags()->attach($tags->random(1));
-                });
-            });
+        // Category::factory(5)->create()
+        //     ->each(function ($category) use ($tags) {
+        //         News::create([
+        //             'title' => fake()->text(20),
+        //             'content' => fake()->paragraph(),
+        //             'banner_image' => fake()->text(10),
+        //             'slug' => fake()->slug(),
+        //             'category_id' => $category->id
+        //         ])->each(function ($news) use ($tags) {
+        //             $news->tags()->attach($tags->random(1));
+        //         });
+        //     });
 
         $this->call([
             // CategorySeeder::class,
