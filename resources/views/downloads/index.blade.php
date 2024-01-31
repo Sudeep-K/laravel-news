@@ -48,7 +48,7 @@
     <div class="max-w-5xl mx-auto my-16">
         @forelse($downloads as $download)
         <h1>{{ $download->title }}</h1>
-        <img src="{{ asset($download->file) }}" />
+        <img src="{{ asset('/storage/' . $download->file) }}" />
         @empty
         @endforelse
     </div>

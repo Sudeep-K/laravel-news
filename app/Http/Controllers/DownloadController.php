@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\DownloadFileRequest;
+use App\Http\Requests\EditDownloadFileRequest;
 use App\Models\Download;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class DownloadController extends Controller
 {
@@ -33,7 +35,6 @@ class DownloadController extends Controller
      */
     public function store(DownloadFileRequest $request)
     {
-        // dd($request);
         $path = $request->file('file_upload')->storePublicly('medias');
 
         Download::create([
@@ -49,7 +50,7 @@ class DownloadController extends Controller
      */
     public function show(Download $download)
     {
-        //
+        return view('downloads.show', ['download' => $download]);
     }
 
     /**
@@ -57,15 +58,28 @@ class DownloadController extends Controller
      */
     public function edit(Download $download)
     {
-        //
+        return view('downloads.edit', ['download' => $download]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Download $download)
+    public function update(EditDownloadFileRequest $request, Download $download)
     {
-        //
+        if ($request->hasFile('file_upload')) {
+            Storage::delete($download->file);
+            $path = $request->file('file_upload')->storePublicly('medias');
+            $download->update([
+                "title" => $request->title,
+                "file" => $path
+            ]);
+        } else {
+            $download->update([
+                "title" => $request->title
+            ]);
+        }
+
+        return redirect(route('downloads.index'));
     }
 
     /**
