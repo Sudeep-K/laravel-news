@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DownloadController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\ProfileController;
@@ -33,6 +34,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::resource('news', NewsController::class);
+Route::resource('categories', CategoryController::class);
 Route::resource('downloads', DownloadController::class);
 
 require __DIR__ . '/auth.php';
