@@ -22,6 +22,25 @@ class NewsController extends Controller
         return view('news.index', ['news' => $news]);
     }
 
+    public function homepage()
+    {
+
+        $news = News::all();
+        $latestNews = News::latest()->take(5)->get();
+        $categories = Category::all();
+        return view('welcome', ['news' => $news, 'categories' => $categories, 'latestNews' => $latestNews]);
+    }
+
+    public function article(string $slug)
+    {
+
+        $news = News::where('slug',$slug)->get();
+        // dd($news[0]->title);
+        $latestNews = News::latest()->take(5)->get();
+        $categories = Category::all();
+        return view('article', ['news' => $news, 'categories' => $categories, 'latestNews' => $latestNews]);
+    }
+
     /**
      * Show the form for creating a new news.
      */
