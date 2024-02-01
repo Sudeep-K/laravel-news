@@ -35,7 +35,7 @@ class DownloadController extends Controller
      */
     public function store(DownloadFileRequest $request)
     {
-        $path = $request->file('file_upload')->storePublicly('medias');
+        $path = $request->file('upload_file')->storePublicly('medias');
 
         Download::create([
             'title' => $request->title,
@@ -66,9 +66,9 @@ class DownloadController extends Controller
      */
     public function update(EditDownloadFileRequest $request, Download $download)
     {
-        if ($request->hasFile('file_upload')) {
+        if ($request->hasFile('upload_file')) {
             Storage::delete($download->file);
-            $path = $request->file('file_upload')->storePublicly('medias');
+            $path = $request->file('upload_file')->storePublicly('medias');
             $download->update([
                 "title" => $request->title,
                 "file" => $path
@@ -87,6 +87,18 @@ class DownloadController extends Controller
      */
     public function destroy(Download $download)
     {
-        //
+        Storage::delete($download->file);
+        Download::destroy($download->id);
+
+        return redirect(route('downloads.index'));
+    }
+
+    /**
+     * Download the specified resource
+     */
+    public function download(Download $download)
+    {
+        // dd("I have reached this download manager");
+        return Storage::download($download->file);
     }
 }

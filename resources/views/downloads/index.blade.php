@@ -45,12 +45,48 @@
 
     <!-- nav component ends here -->
 
+
     <div class="max-w-5xl mx-auto my-16">
-        @forelse($downloads as $download)
-        <h1>{{ $download->title }}</h1>
-        <img src="{{ asset('/storage/' . $download->file) }}" />
-        @empty
-        @endforelse
+        <h2 class="text-3xl font-bold leading-7 text-gray-900">YOUR FILES📂</h2>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-8">
+            @forelse($downloads as $download)
+            <div class="max-w-sm bg-white border border-gray-200 rounded-lg shadow">
+                <a href="#">
+                    @if (Str::endsWith($download->file, 'png') or Str::endsWith($download->file, 'jpg') or Str::endsWith($download->file, 'gif'))
+                    <img class="rounded-t-lg object-cover h-64" src="{{ asset('/storage/' . $download->file) }}" alt="" />
+                    @elseif (Str::endsWith($download->file, 'pdf'))
+                    <img class="rounded-t-lg object-cover h-64" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRIYWSnKPYFFnHjaD6uIlW6dRzBruYR6YyEn7iuZNmZqaHFxwoLsvPgi8cLSYsDsUiEeio&usqp=CAU" alt="" />
+                    @endif
+                </a>
+                <div class="p-5">
+                    <a href="#">
+                        <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">{{ Str::limit($download->title, 20, '...') }}</h5>
+                    </a>
+                    <div class="flex justify-between gap-4 mt-12">
+                        <a href="{{ route('downloads.show', ['download' => $download->id ]) }}" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-green-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300">
+                            View
+                            <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
+                            </svg>
+                        </a>
+                        <div>
+                            </a>
+                            <a href="{{ route('downloads.edit', ['download' => $download->id ]) }}" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300">
+                                Edit
+                            </a>
+                            <form action="{{ route('downloads.destroy', ['download' => $download->id]) }}" method="post" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-orange-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300">
+                                @csrf
+                                @method('delete')
+                                <input style="cursor: pointer" type="submit" value="Delete" class="font-medium text-white-600hover:underline" />
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @empty
+            <div></div>
+            @endforelse
+        </div>
     </div>
 
 </body>

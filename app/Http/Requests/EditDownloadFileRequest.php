@@ -22,8 +22,20 @@ class EditDownloadFileRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "title" => ["sometimes", "alpha"],
-            "file_upload" => ["sometimes", "mimes:png"]
+            "title" => ["sometimes"],
+            "upload_file" => ["sometimes", "mimes:png,jpg,pdf"]
+        ];
+    }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array<string, string>
+     */
+    public function attributes(): array
+    {
+        return [
+            'upload_file' => 'Uploaded file',
         ];
     }
 }

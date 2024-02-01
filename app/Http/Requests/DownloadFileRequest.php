@@ -23,7 +23,7 @@ class DownloadFileRequest extends FormRequest
     {
         return [
             'title' => ['required', 'max:255'],
-            'file_upload' => ['required']
+            'upload_file' => ['required', 'mimes:png,jpg,gif,pdf']
         ];
     }
 
@@ -35,7 +35,7 @@ class DownloadFileRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'file_upload' => 'Uploaded file',
+            'upload_file' => 'Uploaded file',
         ];
     }
 }
