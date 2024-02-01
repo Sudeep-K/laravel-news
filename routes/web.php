@@ -33,6 +33,7 @@ Route::middleware('auth')->group(function () {
 
 Route::resource('news', NewsController::class);
 Route::resource('categories', CategoryController::class);
+Route::get('downloads/{download}/download', [DownloadController::class, "download"])->name('downloads.download');
 Route::resource('downloads', DownloadController::class);
 
 require __DIR__ . '/auth.php';

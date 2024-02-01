@@ -46,8 +46,27 @@
     <!-- nav component ends here -->
 
     <div class="max-w-5xl mx-auto my-16">
-        <h1>{{ $download->title }}</h1>
-        <img src="{{ asset('/storage/' . $download->file) }}" />
+        <h2 class="text-2xl font-semibold leading-7 text-gray-900">{{ $download->title }}</h2>
+        <div class="mt-4">
+            @if (Str::endsWith($download->file, 'png') or Str::endsWith($download->file, 'jpg') or Str::endsWith($download->file, 'gif'))
+            <img class="h-auto max-w-full rounded-lg" src="{{ asset('/storage/' . $download->file) }}" alt="">
+            @elseif (Str::endsWith($download->file, 'pdf'))
+            <img class="rounded-t-lg object-cover h-48" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRIYWSnKPYFFnHjaD6uIlW6dRzBruYR6YyEn7iuZNmZqaHFxwoLsvPgi8cLSYsDsUiEeio&usqp=CAU" alt="" />
+            @endif
+        </div>
+        <div class="mt-6 flex items-center justify-end gap-x-4">
+            <a href="{{ route('downloads.download', ['download' => $download->id ]) }}" class="text-2xl inline-flex items-center px-4 py-4 text-sm font-medium text-center text-white bg-green-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300">
+                Download
+            </a>
+            <a href="{{ route('downloads.edit', ['download' => $download->id ]) }}" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300">
+                Edit
+            </a>
+            <form action="{{ route('downloads.destroy', ['download' => $download->id]) }}" method="post" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-orange-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300">
+                @csrf
+                @method('delete')
+                <input style="cursor: pointer" type="submit" value="Delete" class="font-medium text-white-600hover:underline" />
+            </form>
+        </div>
     </div>
 
 </body>
