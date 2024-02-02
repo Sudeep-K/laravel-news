@@ -8,6 +8,19 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div>
+                <div id="msgContainer"
+                    class="flex items-center p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400 hidden"
+                    role="alert">
+                    <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                        fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                            d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+                    </svg>
+                    <span class="sr-only">Info</span>
+                    <div id="mainContainer">
+                        <span class="font-medium">Success alert!</span> {{ Session::get('message') }}
+                    </div>
+                </div>
                 @if (Session::has('message'))
                     <div class="flex items-center p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
                         role="alert">
@@ -34,7 +47,8 @@
 
 
                         <a href="{{ route('categories.index') }}" type="button"
-                            class="text-gray-900 bg-gradient-to-r from-teal-200 to-lime-200 hover:bg-gradient-to-l hover:from-teal-200 hover:to-lime-200 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-teal-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Manage Category</a>
+                            class="text-gray-900 bg-gradient-to-r from-teal-200 to-lime-200 hover:bg-gradient-to-l hover:from-teal-200 hover:to-lime-200 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-teal-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Manage
+                            Category</a>
                     </div>
 
 
@@ -63,38 +77,37 @@
                                 </thead>
                                 <tbody>
 
-                                    @foreach ($news as $singleNews)
-                                        <tr
+                                    {{-- @dd($news->toArray()) --}}
+
+                                    @foreach ($news->toArray() as $singleNews)
+                                        <tr id="{{ 'link' . $singleNews['id'] }}"
                                             class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                             <th scope="row"
                                                 class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                                 {{ $loop->iteration }}
                                             </th>
                                             <td class="px-6 py-4">
-                                                {{ $singleNews->title }}
+                                                {{ $singleNews['title'] }}
                                             </td>
                                             <td class="px-6 py-4">
-                                                @if (isset($singleNews->category->name))
-                                                    {{ $singleNews->category->name }}
+                                                @if (isset($singleNews['category_id']))
+                                                    {{ $singleNews['category_id'] }}
                                                 @endif
 
                                             </td>
                                             <td>
-                                                <a href="{{ asset($singleNews->banner_image) }}" target="_blank">
-                                                    <img src="{{ asset($singleNews->banner_image) }}"
+                                                <a href="{{ asset($singleNews['banner_image']) }}" target="_blank">
+                                                    <img src="{{ asset($singleNews['banner_image']) }}"
                                                         style="height:100px;" alt="thumbnail" />
                                                 </a>
                                             </td>
                                             <td class="px-6 py-4 text-right flex gap-x-3">
-                                                <a href="{{ route('news.edit', $singleNews->id) }}"
+                                                <a href="{{ route('news.edit', $singleNews['id']) }}"
                                                     class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                                                <form action="{{ route('news.destroy', ['news' => $singleNews->id]) }}"
-                                                    method="post">
-                                                    @csrf
-                                                    @method('delete')
-                                                    <input style="cursor: pointer" type="submit" value="Delete"
-                                                        class="font-medium text-red-600 dark:text-red-500 hover:underline" />
-                                                </form>
+
+                                                <button data-id="{{ $singleNews['id'] }}" style="cursor: pointer"
+                                                    class="deleteNews" value="{{ $singleNews['id'] }}">Delete</button>
+
                                             </td>
                                         </tr>
                                     @endforeach

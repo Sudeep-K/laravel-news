@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\DownloadController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -17,13 +16,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [NewsController::class,'homepage'])->name("home");
+Route::get('/', [NewsController::class, 'homepage'])->name("home");
 
 Route::get('/article/{slug}', [NewsController::class, 'article'])->name('article');
 
 Route::resource('news', NewsController::class);
 
-Route::get('/dashboard', [NewsController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -33,6 +35,8 @@ Route::middleware('auth')->group(function () {
 
 Route::resource('news', NewsController::class);
 Route::resource('categories', CategoryController::class);
-Route::resource('downloads', DownloadController::class);
+// Route::get('downloads/{download}/download', [DownloadController::class, "download"])->name('downloads.download');
+// Route::resource('downloads', DownloadController::class);
+
 
 require __DIR__ . '/auth.php';
