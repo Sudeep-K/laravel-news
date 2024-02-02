@@ -1,10 +1,26 @@
-<x-app-layout>
+{{-- <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
             {{ __('Laravel News') }}
         </h2>
     </x-slot>
 
+    
+</x-app-layout>
+
+@push('scripts')
+    {{ $dataTable->scripts(attributes: ['type' => 'module']) }}
+@endpush
+ --}}
+
+
+
+
+
+
+@extends('layouts.dashboard')
+
+@section('dashboard')
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div>
@@ -24,8 +40,8 @@
                 @if (Session::has('message'))
                     <div class="flex items-center p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
                         role="alert">
-                        <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                        <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                            fill="currentColor" viewBox="0 0 20 20">
                             <path
                                 d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
                         </svg>
@@ -52,66 +68,22 @@
                     </div>
 
 
+
                     <div>
+
                         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                            <table id="myTable"
+                                class="table table-bordered w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                 <thead
                                     class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                     <tr>
-                                        <th scope="col" class="px-6 py-3">
-                                            ID
-                                        </th>
-                                        <th scope="col" class="px-6 py-3">
-                                            NEWS TITLE
-                                        </th>
-                                        <th scope="col" class="px-6 py-3">
-                                            Category
-                                        </th>
-                                        <th scope="col" class="px-6 py-3">
-                                            IMAGE
-                                        </th>
-                                        <th scope="col" class="px-6 py-3">
-                                            <span class="sr-only">Edit</span>
-                                        </th>
+                                        <th>No</th>
+                                        <th>Title</th>
+                                        <th>Category Name</th>
+                                        <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-
-                                    {{-- @dd($news->toArray()) --}}
-
-                                    @foreach ($news->toArray() as $singleNews)
-                                        <tr id="{{ 'link' . $singleNews['id'] }}"
-                                            class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                            <th scope="row"
-                                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                {{ $loop->iteration }}
-                                            </th>
-                                            <td class="px-6 py-4">
-                                                {{ $singleNews['title'] }}
-                                            </td>
-                                            <td class="px-6 py-4">
-                                                @if (isset($singleNews['category_id']))
-                                                    {{ $singleNews['category_id'] }}
-                                                @endif
-
-                                            </td>
-                                            <td>
-                                                <a href="{{ asset($singleNews['banner_image']) }}" target="_blank">
-                                                    <img src="{{ asset($singleNews['banner_image']) }}"
-                                                        style="height:100px;" alt="thumbnail" />
-                                                </a>
-                                            </td>
-                                            <td class="px-6 py-4 text-right flex gap-x-3">
-                                                <a href="{{ route('news.edit', $singleNews['id']) }}"
-                                                    class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-
-                                                <button data-id="{{ $singleNews['id'] }}" style="cursor: pointer"
-                                                    class="deleteNews" value="{{ $singleNews['id'] }}">Delete</button>
-
-                                            </td>
-                                        </tr>
-                                    @endforeach
-
                                 </tbody>
                             </table>
                         </div>
@@ -120,4 +92,4 @@
             </div>
         </div>
     </div>
-</x-app-layout>
+@endsection

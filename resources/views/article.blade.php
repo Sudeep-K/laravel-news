@@ -1,4 +1,4 @@
-@extends('layouts.guest')
+@extends('layouts.guest1')
 
 @section('content')
     <div class= "flex justify-end items-start tile col-span-1 md:col-span-3 lg:col-span-4 bottom-1 px-4">

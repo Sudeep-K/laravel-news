@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\NewsDataTable;
 use App\Http\Requests\StoreNewsRequest;
 use App\Models\Category;
 use App\Models\News;
@@ -9,6 +10,7 @@ use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+use Yajra\DataTables\Facades\DataTables;
 
 class NewsController extends Controller
 {
@@ -18,9 +20,32 @@ class NewsController extends Controller
     public function index()
     {
 
-        $news = News::all();
-        return view('news.index', ['news' => $news]);
+
+        // $news = News::all();
+        // return view('news.index', ['news' => $news]);
+
+        // $data = News::latest()->get();
+        // dd($data);
+
+
+        if (request()->ajax()) {
+            $data = News::latest()->get();
+            // dd($data);
+            return DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn('action', function ($row) {
+                    $actionBtn = '<a href="/news/' . $row['id'] . '/edit" class="edit btn btn-success btn-sm">Edit</a> <a href="javascript:void(0)" data-id="' . $row['id'] . '" onclick="deleteData(' . $row['id'] . ')"  class="delete btn btn-danger btn-sm">Delete</a>';
+                    return $actionBtn;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+        return view('news.index');
     }
+
+
+
+
 
     public function homepage()
     {

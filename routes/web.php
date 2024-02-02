@@ -25,7 +25,7 @@ Route::resource('news', NewsController::class);
 
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    return view('news.index');
 })->middleware(['auth'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
