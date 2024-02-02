@@ -26,15 +26,17 @@ class NewsController extends Controller
     {
 
         $news = News::all();
+
         $latestNews = News::latest()->take(5)->get();
         $categories = Category::all();
+        // dd($categories);
         return view('welcome', ['news' => $news, 'categories' => $categories, 'latestNews' => $latestNews]);
     }
 
     public function article(string $slug)
     {
 
-        $news = News::where('slug',$slug)->get();
+        $news = News::where('slug', $slug)->get();
         // dd($news[0]->title);
         $latestNews = News::latest()->take(5)->get();
         $categories = Category::all();
@@ -193,7 +195,7 @@ class NewsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
 
         $news = News::findOrFail($id);
@@ -203,5 +205,17 @@ class NewsController extends Controller
 
         $news->delete();
         return redirect(route('news.index'))->with('message', 'Blog deleted successfully');
+    }
+
+    public function ajaxDelete(string $id)
+    {
+        $news = News::findOrFail($id);
+        if (File::exists($news->banner_image)) {
+            File::delete($news->banner_image);
+        }
+
+        $news->delete();
+        $data = News::all();
+        return response()->json(['message' => 'data deleted successfully', 'data' => $data->toArray()]);
     }
 }

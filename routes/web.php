@@ -17,13 +17,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [NewsController::class,'homepage'])->name("home");
+Route::get('/', [NewsController::class, 'homepage'])->name("home");
 
 Route::get('/article/{slug}', [NewsController::class, 'article'])->name('article');
 
 Route::resource('news', NewsController::class);
 
-Route::get('/dashboard', [NewsController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
